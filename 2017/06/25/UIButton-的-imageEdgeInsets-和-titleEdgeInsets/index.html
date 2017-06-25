@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,17 +93,20 @@
 
 
 
-<meta name="description" content="在自定义view中 12345678910111213141516171819202122- (instancetype)initWithFrame:(CGRect)frame &amp;#123;if (self == [super initWithFrame:frame]) &amp;#123;CAShapeLayer *border = [CAShapeLayer layer];border.strokeC">
-<meta name="keywords" content="iOS">
+<meta name="description" content="imageEdgeInsets(top,left,bottom,right) 和 titleEdgeInsets(top,left,bottom,right)的值就是我们想要的最终结果与按钮初始状态比较图片和标题的位置分别在上下左右位移的值： 首先123456789CGFloat imageViewWidth = CGRectGetWidth(button.imageView.frame);CGF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设置虚线">
-<meta property="og:url" content="http://yoursite.com/2017/06/24/设置虚线/index.html">
+<meta property="og:title" content="UIButton 的 imageEdgeInsets 和 titleEdgeInsets ">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/index.html">
 <meta property="og:site_name" content="neobug的小屋">
-<meta property="og:description" content="在自定义view中 12345678910111213141516171819202122- (instancetype)initWithFrame:(CGRect)frame &amp;#123;if (self == [super initWithFrame:frame]) &amp;#123;CAShapeLayer *border = [CAShapeLayer layer];border.strokeC">
-<meta property="og:updated_time" content="2017-06-24T07:45:30.000Z">
+<meta property="og:description" content="imageEdgeInsets(top,left,bottom,right) 和 titleEdgeInsets(top,left,bottom,right)的值就是我们想要的最终结果与按钮初始状态比较图片和标题的位置分别在上下左右位移的值： 首先123456789CGFloat imageViewWidth = CGRectGetWidth(button.imageView.frame);CGF">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1679638-01ae173e9320d0d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1679638-f1358db7ceb28a46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1679638-8c8acc20f5ae8d33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-25T01:16:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设置虚线">
-<meta name="twitter:description" content="在自定义view中 12345678910111213141516171819202122- (instancetype)initWithFrame:(CGRect)frame &amp;#123;if (self == [super initWithFrame:frame]) &amp;#123;CAShapeLayer *border = [CAShapeLayer layer];border.strokeC">
+<meta name="twitter:title" content="UIButton 的 imageEdgeInsets 和 titleEdgeInsets ">
+<meta name="twitter:description" content="imageEdgeInsets(top,left,bottom,right) 和 titleEdgeInsets(top,left,bottom,right)的值就是我们想要的最终结果与按钮初始状态比较图片和标题的位置分别在上下左右位移的值： 首先123456789CGFloat imageViewWidth = CGRectGetWidth(button.imageView.frame);CGF">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1679638-01ae173e9320d0d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -131,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/24/设置虚线/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/"/>
 
 
 
 
 
-  <title>设置虚线 | neobug的小屋</title>
+  <title>UIButton 的 imageEdgeInsets 和 titleEdgeInsets  | neobug的小屋</title>
   
 
 
@@ -256,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/设置虚线/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="neobug">
@@ -273,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">设置虚线</h1>
+          <h1 class="post-title" itemprop="name headline">UIButton 的 imageEdgeInsets 和 titleEdgeInsets </h1>
         
 
         <div class="post-meta">
@@ -285,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T15:45:10+08:00">
-                2017-06-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T09:16:15+08:00">
+                2017-06-25
               </time>
             
 
@@ -320,13 +323,18 @@
       
 
       
-        <p>在自定义view中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (instancetype)initWithFrame:(CGRect)frame &#123;</div><div class="line">if (self == [super initWithFrame:frame]) &#123;</div><div class="line">CAShapeLayer *border = [CAShapeLayer layer];</div><div class="line"></div><div class="line">border.strokeColor = [UIColor redColor].CGColor;</div><div class="line"></div><div class="line">border.fillColor = nil;</div><div class="line"></div><div class="line">border.path = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;</div><div class="line"></div><div class="line">border.frame = self.bounds;</div><div class="line"></div><div class="line">border.lineWidth = 1.f;</div><div class="line"></div><div class="line">border.lineCap = @&quot;square&quot;;</div><div class="line"></div><div class="line">border.lineDashPattern = @[@4, @4];    //可以修改查看不同效果</div><div class="line"></div><div class="line">[self.layer addSublayer:border];</div><div class="line">&#125;</div><div class="line">return self;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当不是在<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (instancetype)initWithFrame:(CGRect)frame;</div></pre></td></tr></table></figure></p>
-<p>方法<br>而是在<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (instancetype)init;</div></pre></td></tr></table></figure></p>
-<p>我是这样写</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">- (instancetype)init &#123;</div><div class="line">if (self == [super init]) &#123;</div><div class="line">&#125;</div><div class="line">return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)layoutIfNeeded &#123;</div><div class="line">[super layoutIfNeeded];</div><div class="line">CAShapeLayer *border = [CAShapeLayer layer];</div><div class="line"></div><div class="line">border.strokeColor = [UIColor redColor].CGColor;</div><div class="line"></div><div class="line">border.fillColor = nil;</div><div class="line"></div><div class="line">border.path = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;</div><div class="line"></div><div class="line">border.frame = self.bounds;</div><div class="line"></div><div class="line">border.lineWidth = 1.f;</div><div class="line"></div><div class="line">border.lineCap = @&quot;square&quot;;</div><div class="line"></div><div class="line">border.lineDashPattern = @[@4, @4];</div><div class="line"></div><div class="line">[self.layer addSublayer:border];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在创建 CustonView的时候<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CustonView *view = [[CustonView alloc] init];//WithFrame:CGRectMake(100, 100, 100, 100)];</div><div class="line">view.frame = CGRectMake(100, 100, 100, 100);</div><div class="line">[view layoutIfNeeded];</div><div class="line">[self.view addSubview:view];</div></pre></td></tr></table></figure></p>
+        <p>imageEdgeInsets(top,left,bottom,right) 和 titleEdgeInsets(top,left,bottom,right)的值就是我们想要的最终结果与按钮初始状态比较图片和标题的位置分别在上下左右位移的值：</p>
+<p>首先<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CGFloat imageViewWidth = CGRectGetWidth(button.imageView.frame);</div><div class="line"></div><div class="line">CGFloat labelWidth = CGRectGetWidth(button.titleLabel.frame);</div><div class="line"></div><div class="line">CGFloat buttonWidth = CGRectGetWidth(button.frame);</div><div class="line"></div><div class="line">默认状态UIButton 的  imageEdgeInsets ＝ UIEdgeInsetsMake(0,0,0,0);</div><div class="line"></div><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0,0,0);</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-01ae173e9320d0d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>如果我们希望按钮最终是这样:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-f1358db7ceb28a46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>也就是最终我们希望图片上下位置不变top = 0, bottom = 0;向右位移一个label的宽度</p>
+<p>同时标题上下位置不变top = 0, bottom = 0;向左位移一个图片的宽度</p>
+<p>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imageEdgeInsets = UIEdgeInsetsMake(0,0 + labelWidth,0,0 - labelWidth);</div></pre></td></tr></table></figure></p>
+<p>图片相对初始状态左边距加了labelWidth，右边减labelWidth，<br>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0 - imageViewWidth,0, 0 + imageViewWidth);</div></pre></td></tr></table></figure></p>
+<p>如果希望图片和标题都居中，即相对于初始位置图片右移，标题左移</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-8c8acc20f5ae8d33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CGFloat  button_centerX =CGRectGetMidX(self.bounds);// bounds哦</div><div class="line"></div><div class="line">CGFloat titleLabel_centerX =CGRectGetMidX(self.titleLabel.frame);</div><div class="line"></div><div class="line">CGFloat imageView_centerX =CGRectGetMidX(self.imageView.frame);</div><div class="line"></div><div class="line">imageEdgeInsets = UIEdgeInsetsMake(0,0 + (button_centerX - imageView_centerX),0,0 - (button_centerX - imageView_centerX));</div></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0 - (titleLabel_centerX - button_centerX),0, 0 + (titleLabel_centerX - button_centerX));</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -354,12 +362,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/iOS/" rel="tag"># iOS</a>
-          
-        </div>
-      
 
       
       
@@ -369,8 +371,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/24/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2017/06/25/iOS10-title和leftBarButtonItem不显示/" rel="next" title="iOS10 title和leftBarButtonItem不显示">
+                <i class="fa fa-chevron-left"></i> iOS10 title和leftBarButtonItem不显示
               </a>
             
           </div>
@@ -378,10 +380,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/25/获取tableview的reloadData的结束状态/" rel="prev" title="获取tableview的reloadData的结束状态">
-                获取tableview的reloadData的结束状态 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

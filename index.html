@@ -253,6 +253,243 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="neobug">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="neobug的小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/" itemprop="url">UIButton 的 imageEdgeInsets 和 titleEdgeInsets </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T09:16:15+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>imageEdgeInsets(top,left,bottom,right) 和 titleEdgeInsets(top,left,bottom,right)的值就是我们想要的最终结果与按钮初始状态比较图片和标题的位置分别在上下左右位移的值：</p>
+<p>首先<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CGFloat imageViewWidth = CGRectGetWidth(button.imageView.frame);</div><div class="line"></div><div class="line">CGFloat labelWidth = CGRectGetWidth(button.titleLabel.frame);</div><div class="line"></div><div class="line">CGFloat buttonWidth = CGRectGetWidth(button.frame);</div><div class="line"></div><div class="line">默认状态UIButton 的  imageEdgeInsets ＝ UIEdgeInsetsMake(0,0,0,0);</div><div class="line"></div><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0,0,0);</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-01ae173e9320d0d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>如果我们希望按钮最终是这样:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-f1358db7ceb28a46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>也就是最终我们希望图片上下位置不变top = 0, bottom = 0;向右位移一个label的宽度</p>
+<p>同时标题上下位置不变top = 0, bottom = 0;向左位移一个图片的宽度</p>
+<p>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imageEdgeInsets = UIEdgeInsetsMake(0,0 + labelWidth,0,0 - labelWidth);</div></pre></td></tr></table></figure></p>
+<p>图片相对初始状态左边距加了labelWidth，右边减labelWidth，<br>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0 - imageViewWidth,0, 0 + imageViewWidth);</div></pre></td></tr></table></figure></p>
+<p>如果希望图片和标题都居中，即相对于初始位置图片右移，标题左移</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1679638-8c8acc20f5ae8d33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CGFloat  button_centerX =CGRectGetMidX(self.bounds);// bounds哦</div><div class="line"></div><div class="line">CGFloat titleLabel_centerX =CGRectGetMidX(self.titleLabel.frame);</div><div class="line"></div><div class="line">CGFloat imageView_centerX =CGRectGetMidX(self.imageView.frame);</div><div class="line"></div><div class="line">imageEdgeInsets = UIEdgeInsetsMake(0,0 + (button_centerX - imageView_centerX),0,0 - (button_centerX - imageView_centerX));</div></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">titleEdgeInsets ＝ UIEdgeInsetsMake(0,0 - (titleLabel_centerX - button_centerX),0, 0 + (titleLabel_centerX - button_centerX));</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/iOS10-title和leftBarButtonItem不显示/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="neobug">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="neobug的小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/25/iOS10-title和leftBarButtonItem不显示/" itemprop="url">iOS10 title和leftBarButtonItem不显示</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T09:12:33+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>之前自定义了navigationBar的背景颜色，升级到iOS10后，发现title,跟leftBarButtonItem不显示。</p>
+<p>iOS9 之前的navigationBar的背景是_UINavigationBarBackground，到iOS变成了_UIBarBackground，可以通过xcode查看一下相应的布局。<br>我的解决办法是，分别判断iOS10，iOS9的版本，找到对应的背景图，将起隐藏掉，可以消除分割线。然后重新创建一个视图层，颜色可以自定义，需要注意在添加视图或者更新视图时要放到主线程里，同时这个方法需要在viewWillAppear里调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#define  isIOS9   ([[UIDevice currentDevice].systemVersion intValue]&gt;=9?YES:NO)</div><div class="line">#define  isIOS10  ([[UIDevice currentDevice].systemVersion intValue]&gt;=10?YES:NO)</div><div class="line"></div><div class="line">#pragma mark - 动态修改状态栏跟顶部导航栏的颜色</div><div class="line">-(void)changeNavigationBarBackgroundColor:(UIColor*)barBackgroundColor&#123;</div><div class="line">    if([self.navigationController.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)])&#123;</div><div class="line">        NSArray*subviews = self.navigationController.navigationBar.subviews;</div><div class="line">        for(id viewObj in subviews)&#123;</div><div class="line">            if(isIOS10) &#123;</div><div class="line">            //iOS10,改变了状态栏的类为 _UIBarBackground</div><div class="line">            NSString *classStr = [NSString stringWithUTF8String:object_getClassName(viewObj)];</div><div class="line">                if([classStr isEqualToString:@&quot;_UIBarBackground&quot;]) &#123;</div><div class="line">                        UIImageView *imageView = (UIImageView*)viewObj; imageView.hidden=YES;</div><div class="line">                &#125;</div><div class="line">            &#125;else&#123;</div><div class="line">                //iOS9以及iOS9之前使用的是 _UINavigationBarBackground</div><div class="line">                NSString *classStr = [NSString stringWithUTF8String:object_getClassName(viewObj)];</div><div class="line">                if( [classStr isEqualToString:@&quot;_UINavigationBarBackground&quot;]) &#123;</div><div class="line">                        UIImageView *imageView = (UIImageView*)viewObj; imageView.hidden=YES;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        UIImageView *imageView = [self.navigationController.navigationBar viewWithTag:111];</div><div class="line">        if(!imageView)&#123;</div><div class="line">            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0,-20,self.view.frame.size.width,64)];</div><div class="line">            imageView.tag =111;</div><div class="line">            [imageView setBackgroundColor:barBackgroundColor];</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123; [self.navigationController.navigationBar insertSubview:imageView atIndex:0]; &#125;);</div><div class="line">        &#125;</div><div class="line">        else&#123;</div><div class="line">            [imageView setBackgroundColor:barBackgroundColor];</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123; [self.navigationController.navigationBar sendSubviewToBack:imageView]; &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/获取tableview的reloadData的结束状态/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -640,7 +877,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
