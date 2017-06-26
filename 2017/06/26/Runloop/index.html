@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="平时开发 用不到  保证我们的程序不退出  负责监听事件，比如说触摸、时钟、网络、更新我们的UI  如果没有事件的发生，程序就会休眠  区分模式  FOUNDATION_EXPORT NSRunLoopMode const NSDefaultRunLoopMode;FOUNDATION_EXPORT NSRunLoopMode const NSRunLoopCommonModes NS_AVAI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Runloop">
+<meta property="og:url" content="http://yoursite.com/2017/06/26/Runloop/index.html">
+<meta property="og:site_name" content="neobug的小屋">
+<meta property="og:description" content="平时开发 用不到  保证我们的程序不退出  负责监听事件，比如说触摸、时钟、网络、更新我们的UI  如果没有事件的发生，程序就会休眠  区分模式  FOUNDATION_EXPORT NSRunLoopMode const NSDefaultRunLoopMode;FOUNDATION_EXPORT NSRunLoopMode const NSRunLoopCommonModes NS_AVAI">
+<meta property="og:updated_time" content="2017-06-26T03:36:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Runloop">
+<meta name="twitter:description" content="平时开发 用不到  保证我们的程序不退出  负责监听事件，比如说触摸、时钟、网络、更新我们的UI  如果没有事件的发生，程序就会休眠  区分模式  FOUNDATION_EXPORT NSRunLoopMode const NSDefaultRunLoopMode;FOUNDATION_EXPORT NSRunLoopMode const NSRunLoopCommonModes NS_AVAI">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/26/Runloop/"/>
+
+
+
+
+
+  <title>Runloop | neobug的小屋</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">neobug的小屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/26/Runloop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="neobug">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="neobug的小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Runloop</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-26T11:13:25+08:00">
+                2017-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><p>平时开发 用不到</p>
+</li>
+<li><p>保证我们的程序不退出</p>
+</li>
+<li><p>负责监听事件，比如说触摸、时钟、网络、更新我们的UI</p>
+</li>
+<li><p>如果没有事件的发生，程序就会休眠</p>
+</li>
+<li><p>区分模式</p>
+<blockquote>
+<p>FOUNDATION_EXPORT NSRunLoopMode const NSDefaultRunLoopMode;<br>FOUNDATION_EXPORT NSRunLoopMode const NSRunLoopCommonModes NS_AVAILABLE(10_5, 2_0);</p>
+</blockquote>
+</li>
+</ul>
+<p>第一种 ： 时钟模式、网络模式<br>第二种： UI模式（用户交互模式） 优先级最高</p>
+<h3 id="NSTimer-Demo"><a href="#NSTimer-Demo" class="headerlink" title="NSTimer Demo"></a>NSTimer Demo</h3><ul>
+<li>写一个Timer加入Runloop</li>
+<li>在当前屏幕中添加一个TextView</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line"></div><div class="line">    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">    // 拿到我们的当前的Runloop 加入到默认的运行循环中</div><div class="line">    [[NSRunLoop currentRunLoop] addTimer:timer forMode:(NSDefaultRunLoopMode)];</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 我们来简单打印一下当前线程</div><div class="line">- (void)updateTimer&#123;</div><div class="line">    NSLog(@&quot;%@&quot;,[NSThread currentThread]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">第二种</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line"></div><div class="line">    //    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">    //    [[NSRunLoop currentRunLoop] addTimer:timer forMode:(NSDefaultRunLoopMode)];</div><div class="line"></div><div class="line">    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)updateTimer&#123;</div><div class="line">    NSLog(@&quot;%@&quot;,[NSThread currentThread]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>我们在Storyboard中拖一个TextView，拖动的时候，就发现，Timer不走了。</p>
+</li>
+<li><p>运行 拖动之后 发现 Timer打印不走了。</p>
+</li>
+<li><p>原因：Timer所在的Runloop和UI刷新的Runloop用的不是一个Runloop，而UI的Runloop模式的优先级呢比较高，所以会造成这种UI刷新优先级高造成Timer停顿的现象。</p>
+</li>
+<li><p>解决办法</p>
+</li>
+<li><p>我们将Timer代码加入到UI Runloop模式</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line"></div><div class="line">    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">    // 加入到UI模式</div><div class="line">    [[NSRunLoop currentRunLoop] addTimer:timer forMode:(NSRunLoopCommonModes)];</div><div class="line"></div><div class="line">    //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)updateTimer&#123;</div><div class="line">    NSLog(@&quot;%@&quot;,[NSThread currentThread]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>再次运行 发现TextView拖动的时候不会影响到Timer的运行了</p>
+</li>
+<li><p>第二个问题<br>虽然这么做不会影响到Timer但是如果我们在Timer刷新事件中加入耗时操作会影响到UI的操作。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line"></div><div class="line">    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">    // 加入到UI模式</div><div class="line">    [[NSRunLoop currentRunLoop] addTimer:timer forMode:(NSRunLoopCommonModes)];</div><div class="line"></div><div class="line">    //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)updateTimer&#123;</div><div class="line"></div><div class="line">    // 加入耗时操作</div><div class="line">    [NSThread sleepForTimeInterval:1.0];</div><div class="line"></div><div class="line">    NSLog(@&quot;%@&quot;,[NSThread currentThread]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>再次运行 滑动UI发现 非常卡顿 ，这是因为Timer的事件影响了UI的正常运行。</p>
+</li>
+<li><p>解决办法<br>耗时的方法不能放在主线程中来做，把耗时的操作放到子线程中。</p>
+</li>
+<li><p>问题：我们把耗时的操作放在子线程中是不会卡顿UI了，但是如果我们更新UI比较耗时怎么办呢？这个时候就要优化了</p>
+</li>
+</ul>
+<h3 id="TableView加载超大的图片"><a href="#TableView加载超大的图片" class="headerlink" title="TableView加载超大的图片"></a>TableView加载超大的图片</h3><ul>
+<li><p>先说一个小问题，线程可以随便开吗？</p>
+</li>
+<li><p>答案是线程尽量不要开太多，太多的话，手机会发烫，也会更加耗电。所以尽可能的少开线程。</p>
+</li>
+<li><p>TableView加载大图多Cell的时候，会造成哪些问题？</p>
+</li>
+<li><p>内存占用过大，这个我们在加载的时候每次清理子View解决</p>
+</li>
+<li><p>页面会卡顿，是因为绘制UI的耗时操作</p>
+</li>
+<li><p>怎么做？</p>
+</li>
+</ul>
+<p>1： 绘制图片的时候，实际上是走的Runloop，一次Runloop要绘制所有的耗时操作，那么我们可以把绘制UI的操作放在多个Runloop下而不是一次就绘制好它。</p>
+<p>2：做法：在Runloop走一次的时候 ，我们把它拿出来，告诉它一次少做点UI操作就好了</p>
+<p>先看一个加载大图的Demo</p>
+<p>发现非常卡顿</p>
+<p>思路：<br>1：监听Runloop的循环！用到C语言的框架，循环一次，调用一个回调函数<br>2：在回调函数里面进行加载图片的事情（执行一次任务）TableView最清楚<br>3：提供一个添加任务的方法，加载图片的方法 CellForRow<br>4：在Runloop回调函数中取出来一个个取出来执行。</p>
+<ul>
+<li>Runloop的回调事件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/* Run Loop Observer Activities */</div><div class="line">typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) &#123;</div><div class="line">kCFRunLoopEntry = (1UL &lt;&lt; 0), // 进入</div><div class="line">kCFRunLoopBeforeTimers = (1UL &lt;&lt; 1),  // 即将进入Timer</div><div class="line">kCFRunLoopBeforeSources = (1UL &lt;&lt; 2),  // </div><div class="line">kCFRunLoopBeforeWaiting = (1UL &lt;&lt; 5), // 即将进行休眠</div><div class="line">kCFRunLoopAfterWaiting = (1UL &lt;&lt; 6),</div><div class="line">kCFRunLoopExit = (1UL &lt;&lt; 7),  // 即将退出</div><div class="line">kCFRunLoopAllActivities = 0x0FFFFFFFU</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>Runloop的监听事件<br>每次状态改变，将会回调这个监听事件<br>C语言通过函数指针来进行回调 后缀Ref</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">typedef struct CF_BRIDGED_MUTABLE_TYPE(id) __CFRunLoopObserver * CFRunLoopObserverRef;</div></pre></td></tr></table></figure>
+<h3 id="Runloop监听的代码"><a href="#Runloop监听的代码" class="headerlink" title="Runloop监听的代码"></a>Runloop监听的代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">//  ViewController.m</div><div class="line">//  加载大图的Demo</div><div class="line">//</div><div class="line">//  Created by mac on 2017/2/18.</div><div class="line">//  Copyright © 2017年 mac. All rights reserved.</div><div class="line">//</div><div class="line"></div><div class="line">#import &quot;ViewController.h&quot;</div><div class="line">#import &quot;MyCell.h&quot;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line">定义一个block</div><div class="line">*/</div><div class="line">typedef BOOL(^RunloopBlock)(void);</div><div class="line"></div><div class="line">// 加载最后面的30张</div><div class="line"></div><div class="line">@interface ViewController ()&lt;UITableViewDelegate,UITableViewDataSource&gt;</div><div class="line"></div><div class="line">@property (weak, nonatomic) IBOutlet UITableView *tableView;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line">存放任务的数组</div><div class="line">*/</div><div class="line">@property (nonatomic, strong) NSMutableArray * tasks;</div><div class="line"></div><div class="line">/**</div><div class="line">任务标记</div><div class="line">*/</div><div class="line">@property (nonatomic, strong) NSMutableArray * tasksKeys;</div><div class="line"></div><div class="line">/**</div><div class="line">最大任务数</div><div class="line">*/</div><div class="line">@property (nonatomic, assign) NSInteger max;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line">Timer</div><div class="line">*/</div><div class="line">@property (nonatomic, strong) NSTimer * timer;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line"></div><div class="line">    _max = 30;</div><div class="line"></div><div class="line">    _tasks = [NSMutableArray array];</div><div class="line"></div><div class="line">    _tasksKeys = [NSMutableArray array];</div><div class="line"></div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line"></div><div class="line">    //    _timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timeFiredMethod) userInfo:nil repeats:YES];</div><div class="line"></div><div class="line">    // 注册监听</div><div class="line">    [self addRunloopObserver];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)timeFiredMethod&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView&#123;</div><div class="line">    return 1;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;</div><div class="line">    return 399;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line"></div><div class="line">    MyCell *cell = [tableView dequeueReusableCellWithIdentifier:@&quot;myCell&quot;];</div><div class="line">    NSString *path1 = [[NSBundle mainBundle] pathForResource:@&quot;spaceship&quot; ofType:@&quot;png&quot;];</div><div class="line">    UIImage *image2 = [UIImage imageWithContentsOfFile:path1];</div><div class="line">    //    imageView2.contentMode =  UIViewContentModeScaleAspectFit;</div><div class="line">    //    imageView2.image = image2;</div><div class="line"></div><div class="line">    // 卡顿原因 当我们拖拽Cell的时候 Runloop一次循环就要绘制完所有的UI刷新工作</div><div class="line">    // 不要在一次Runloop的时候绘制所有的图片，我们可以在每次循环的时候只绘制一张图片</div><div class="line">    // 所以 在这里不要直接加载图片 将加载图片的代码丢给Runloop 用什么东西放代码？ Block!</div><div class="line"></div><div class="line">    // 添加到我的任务里</div><div class="line">    [self addTask:^BOOL&#123;</div><div class="line">    [UIView transitionWithView:cell.contentView duration:0.3 options:(UIViewAnimationOptionCurveEaseInOut) animations:^&#123;</div><div class="line">    cell.imageViewOne.image = image2;</div><div class="line">&#125; completion:^(BOOL finished) &#123;</div><div class="line"></div><div class="line">&#125;];</div><div class="line">    return YES;</div><div class="line">&#125; withKey:indexPath];</div><div class="line"></div><div class="line">    [self addTask:^BOOL&#123;</div><div class="line">    [UIView transitionWithView:cell.contentView duration:0.3 options:(UIViewAnimationOptionCurveEaseInOut) animations:^&#123;</div><div class="line">        cell.imageViewTwo.image = image2;</div><div class="line">&#125; completion:^(BOOL finished) &#123;</div><div class="line"></div><div class="line">&#125;];</div><div class="line">    return YES;</div><div class="line">&#125; withKey:indexPath];</div><div class="line"></div><div class="line">    [self addTask:^BOOL&#123;</div><div class="line">    [UIView transitionWithView:cell.contentView duration:0.3 options:(UIViewAnimationOptionCurveEaseInOut) animations:^&#123;</div><div class="line">        cell.imageViewThree.image = image2;</div><div class="line">&#125; completion:^(BOOL finished) &#123;</div><div class="line"></div><div class="line">&#125;];</div><div class="line">    return YES;</div><div class="line">&#125; withKey:indexPath];</div><div class="line"></div><div class="line">    return cell;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#pragma mark -- &lt;Runloop&gt;</div><div class="line"></div><div class="line">// MARK: 添加任务</div><div class="line">- (void)addTask:(RunloopBlock)unit withKey:(id)key&#123;</div><div class="line"></div><div class="line">    // 添加任务</div><div class="line">    [self.tasks addObject:unit];</div><div class="line"></div><div class="line">    // 添加任务的Key</div><div class="line">    [self.tasksKeys addObject:key];</div><div class="line">    </div><div class="line">    // 保证之前没有显示出来的任务 不再浪费时间加载 保证每次只执行最后添加的30个任务</div><div class="line">    if (self.tasks.count &gt; self.max) &#123;</div><div class="line">        // 移除任务</div><div class="line">        [self.tasks removeObjectAtIndex:0];</div><div class="line">        // 移除任务的key</div><div class="line">        [self.tasksKeys removeObjectAtIndex:0];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#pragma mark -- 回调函数</div><div class="line">    // 定义回调函数 一次Runloop来一次</div><div class="line">    static void Callback(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)&#123;</div><div class="line">    NSLog(@&quot;%s&quot;, __func__);</div><div class="line">    NSLog(@&quot;%@&quot;,info);  // info 代表的就是当前的控制器</div><div class="line">    // 通过桥接拿到VC</div><div class="line">    ViewController *vc = (__bridge ViewController *)(info);</div><div class="line"></div><div class="line">    // 任务完毕 返回</div><div class="line">    if (vc.tasks.count == 0) &#123;</div><div class="line">        return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">    BOOL result = NO;</div><div class="line"></div><div class="line">    // 这里用死循环 来循环取出并执行任务</div><div class="line">    while (result == NO &amp;&amp; vc.tasks.count) &#123;</div><div class="line">        // 即判断Block不为空 又判断task不为空</div><div class="line">        RunloopBlock unit = vc.tasks.firstObject;</div><div class="line">        // 执行任务</div><div class="line">        result = unit();</div><div class="line">        // 干掉第一个任务</div><div class="line">        [vc.tasks removeObjectAtIndex:0];</div><div class="line">        // 干掉标识</div><div class="line">        [vc.tasksKeys removeObjectAtIndex:0];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line">这里面都是C语言 -- 添加一个监听者</div><div class="line">*/</div><div class="line">- (void)addRunloopObserver&#123;</div><div class="line">    // 获取当前的Runloop</div><div class="line">    CFRunLoopRef runloop = CFRunLoopGetCurrent();</div><div class="line">    // 定义一个context</div><div class="line">    CFRunLoopObserverContext context = &#123;</div><div class="line">    0,</div><div class="line">    (__bridge void *)(self),</div><div class="line">    &amp;CFRetain,</div><div class="line">    &amp;CFRelease,</div><div class="line">    NULL</div><div class="line">&#125;;</div><div class="line">    // 定义一个观察者</div><div class="line">    static CFRunLoopObserverRef defaultModeObserver;</div><div class="line">    // 创建我们的观察者</div><div class="line">    defaultModeObserver = CFRunLoopObserverCreate(NULL,</div><div class="line">                                kCFRunLoopBeforeWaiting,</div><div class="line">                                                    YES,</div><div class="line">                                    NSIntegerMax - 999,</div><div class="line">                                            &amp;Callback,</div><div class="line">                                            &amp;context</div><div class="line">                                                );</div><div class="line">    // 添加当前Runloop的观察者</div><div class="line">    CFRunLoopAddObserver(runloop, defaultModeObserver, kCFRunLoopDefaultMode);</div><div class="line">    // C语言有Create 就需要release</div><div class="line">    CFRelease(defaultModeObserver);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/UIButton-的-imageEdgeInsets-和-titleEdgeInsets/" rel="next" title="UIButton 的 imageEdgeInsets 和 titleEdgeInsets ">
+                <i class="fa fa-chevron-left"></i> UIButton 的 imageEdgeInsets 和 titleEdgeInsets 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="neobug" />
+          <p class="site-author-name" itemprop="name">neobug</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#NSTimer-Demo"><span class="nav-number">1.</span> <span class="nav-text">NSTimer Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TableView加载超大的图片"><span class="nav-number">2.</span> <span class="nav-text">TableView加载超大的图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runloop监听的代码"><span class="nav-number">3.</span> <span class="nav-text">Runloop监听的代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">neobug</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
