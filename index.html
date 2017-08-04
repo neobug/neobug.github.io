@@ -253,6 +253,119 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/04/app帮助里的长图设置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="neobug">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="neobug的小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/04/app帮助里的长图设置/" itemprop="url">app帮助里的长图设置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-04T16:06:29+08:00">
+                2017-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在app里有些帮助文档,是一张长长的图片,如何简单的设置呢</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (void)addImageView &#123;</div><div class="line">    //添加scrollview</div><div class="line">    UIScrollView *scro = [[UIScrollView alloc]  initWithFrame:self.view.bounds];</div><div class="line">    [self.view addSubview:scro];</div><div class="line"></div><div class="line">    //设置image</div><div class="line">    UIImage *img = [UIImage imageNamed:@&quot;help&quot;];</div><div class="line"></div><div class="line">    //获取图片像素</div><div class="line">    CGFloat fixelW = CGImageGetWidth(img.CGImage);</div><div class="line">    CGFloat fixelH = CGImageGetHeight(img.CGImage);</div><div class="line"></div><div class="line">    CGFloat mainWidth = self.view.frame.size.width;</div><div class="line">    CGFloat mainHeight = self.view.frame.size.width * fixelH/fixelW;</div><div class="line"></div><div class="line">    //设置contentsize</div><div class="line">    [scro setContentSize:CGSizeMake(mainWidth, mainHeight)];</div><div class="line"></div><div class="line">    //设置imageview</div><div class="line">    UIImageView *imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, mainWidth, mainHeight)];</div><div class="line">    [scro addSubview:imgview];</div><div class="line">    imgview.image = img;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/19/摇一摇截图-给测试的福利/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1295,7 +1408,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
